@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+</head>
+<body>
+<h1>Admin Panel</h1>
+
+<!-- Form for Adding New User -->
+<section>
+    <h2>Add New User</h2>
+    <form th:action="@{/admin/add}" method="post" th:object="${newUser}">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" th:field="*{username}" required />
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" required />
+        </div>
+        <div>
+            <label for="roles">Roles:</label>
+            <select id="roles" name="roles" multiple="multiple">
+                <option th:each="role : ${allRoles}"
+                        th:value="${role.id}"
+                        th:text="${role.name}"></option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Add User</button>
+        </div>
+    </form>
+</section>
+
+<!-- User List -->
+<section>
+    <h2>User List</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td>•••••••</td>
+            <!-- Edit Column -->
+            <td>
+                <!-- Форма для редактирования пользователя -->
+                <form th:action="@{/admin/edit}" method="post" style="margin:0;">
+                    <input type="hidden" name="id" th:value="${user.id}" />
+                    <div>
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" th:value="${user.username}" placeholder="Username" />
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" placeholder="New Password" />
+                    </div>
+                    <div>
+                        <label for="roles">Roles:</label>
+                        <select name="roles" multiple="multiple">
+                            <option th:each="role : ${allRoles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.name}"
+                                    th:selected="${#lists.contains(user.roles, role)}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit">Edit</button>
+                </form>
+            </td>
+            <!-- Delete Column -->
+            <td>
+                <form th:action="@{/admin/delete}" method="post" style="margin:0;">
+                    <input type="hidden" name="id" th:value="${user.id}" />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Logout -->
+<section style="margin-top: 20px;">
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</section>
+</body>
+</html>
