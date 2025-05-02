@@ -2,9 +2,12 @@ package com.ivanpolovnev.spring_security_app.controllers;
 
 import com.ivanpolovnev.spring_security_app.entity.User;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -14,7 +17,9 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
 
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("roles", user.getAuthorities());
+        model.addAttribute("roles", user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
 
         return "user";
     }

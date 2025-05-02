@@ -43,13 +43,14 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setUsername(user.getUsername());
 
-        if (!user.getPassword().equals(existingUser.getPassword())) {
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
         existingUser.setRoles(user.getRoles());
         userRepository.save(existingUser);
     }
+
 
 
     @Transactional
