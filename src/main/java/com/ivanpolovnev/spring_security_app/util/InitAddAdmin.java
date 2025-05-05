@@ -24,7 +24,7 @@ public class InitAddAdmin {
     }
 
     @PostConstruct
-    void init() {
+    public void init() {
         Role adminRole = roleRepository.findByName("ROLE_ADMIN")
                 .orElseGet(() -> roleRepository.save(new Role("ROLE_ADMIN")));
 
